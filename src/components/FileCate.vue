@@ -3,12 +3,10 @@
     <!-- 搜索部分 -->
     <div class="header-title">
       <div class="title-bar">
-        <h1 class="stitle">人事档案管理-人事档案变动维护</h1>
+        <h1 class="stitle">人事档案材料管理-档案材料信息维护</h1>
       </div>
     </div>
-    <v-row>
-
-    </v-row>
+    
     <v-row>
       <!-- <crud-table /> -->
       <div class="table-position">
@@ -20,7 +18,7 @@
 </template>
 
 <script>
-import CrudTable from './CrudTable'
+import CrudTable from './CateCrudTable'
 export default {
   name: 'HelloWorld',
   components: {
