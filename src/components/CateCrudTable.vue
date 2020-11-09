@@ -114,10 +114,43 @@
                       sm="6"
                       md="4"
                     >
-                      <v-text-field
-                        v-model="editedItem.time"
-                        label="材料形成时间"
-                      ></v-text-field>
+                      <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  :return-value.sync="date"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="editedItem.time"
+                      label="材料形成时间"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="editedItem.time"
+                    no-title
+                    scrollable
+                    locale="zh"
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="menu = false"
+                    >取消</v-btn>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.menu.save(editedItem.time)"
+                    >确认</v-btn>
+                  </v-date-picker>
+                </v-menu>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -227,10 +260,48 @@
                 sm="6"
                 md="4"
               >
-                <v-text-field
+                <v-menu
+                  ref="menu"
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :return-value.sync="date"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="time"
+                      label="材料形成时间"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="time"
+                    no-title
+                    scrollable
+                    locale="zh"
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="menu = false"
+                    >取消</v-btn>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.menu.save(time)"
+                    >确认</v-btn>
+                  </v-date-picker>
+                </v-menu>
+                <!-- <v-text-field
                   v-model="editedItem.time"
+                  readonly
                   label="材料形成时间"
-                ></v-text-field>
+                ></v-text-field> -->
               </v-col>
             </v-row>
           </v-container>
@@ -300,7 +371,11 @@ export default {
     snackbar: false,
     text: 'Hello, I\'m a snackbar',
     showBatch: false,
-    avalue: []
+    avalue: [],
+    date: new Date().toISOString().substr(0, 10),
+    menu: false,
+    menu2: false,
+    time: ''
   }),
 
   computed: {

@@ -25,7 +25,7 @@
       :expanded.sync="expanded"
       item-key="name"
       show-expand
-      :footer-props= "{
+      :footer-props="{
         itemsPerPageText: '每页显示行数'
       }"
     >
@@ -77,10 +77,47 @@
                       sm="6"
                       md="4"
                     >
-                      <v-text-field
+                      <!-- <v-text-field
                         v-model="editedItem.calories"
                         label="档案变动时间"
-                      ></v-text-field>
+                      ></v-text-field> -->
+                      <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :return-value.sync="date"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="editedItem.calories"
+                            label="档案变动时间"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="editedItem.calories"
+                          no-title
+                          scrollable
+                          locale="zh"
+                        >
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="menu = false"
+                          >取消</v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.menu.save(editedItem.calories)"
+                          >确认</v-btn>
+                        </v-date-picker>
+                      </v-menu>
                     </v-col>
                     <v-col
                       cols="12"
@@ -98,36 +135,35 @@
                       ></v-select>
                     </v-col>
 
-                      
                     <!-- </div> -->
                   </v-row>
                   <v-row v-if="editedItem.fat==='档案新增（接受）'">
                     <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        v-for="(item, index) in quesList"
-                        :key="index"
-                      >
-                        <v-text-field
-                          v-model="editedItem.ext[index]"
-                          :label="item"
-                        ></v-text-field>
-                      </v-col>
+                      cols="12"
+                      sm="6"
+                      md="4"
+                      v-for="(item, index) in quesList"
+                      :key="index"
+                    >
+                      <v-text-field
+                        v-model="editedItem.ext[index]"
+                        :label="item"
+                      ></v-text-field>
+                    </v-col>
                   </v-row>
                   <v-row v-if="editedItem.fat==='档案内调'||editedItem.fat==='档案系统内调动'">
                     <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        v-for="(item, index) in ndList"
-                        :key="index"
-                      >
-                        <v-text-field
-                          v-model="editedItem.ext[index]"
-                          :label="item"
-                        ></v-text-field>
-                      </v-col>
+                      cols="12"
+                      sm="6"
+                      md="4"
+                      v-for="(item, index) in ndList"
+                      :key="index"
+                    >
+                      <v-text-field
+                        v-model="editedItem.ext[index]"
+                        :label="item"
+                      ></v-text-field>
+                    </v-col>
                   </v-row>
                   <!-- <v-row v-if="editedItem.fat==='档案系统内调'">
                     <v-col
@@ -145,17 +181,17 @@
                   </v-row> -->
                   <v-row v-if="editedItem.fat==='档案转递（发）'">
                     <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                        v-for="(item, index) in zdfList"
-                        :key="index"
-                      >
-                        <v-text-field
-                          v-model="editedItem.ext[index]"
-                          :label="item"
-                        ></v-text-field>
-                      </v-col>
+                      cols="12"
+                      sm="6"
+                      md="4"
+                      v-for="(item, index) in zdfList"
+                      :key="index"
+                    >
+                      <v-text-field
+                        v-model="editedItem.ext[index]"
+                        :label="item"
+                      ></v-text-field>
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -197,22 +233,38 @@
           <div class="container-change">
             <p class="title-head">{{ item.name }}的档案变动详情：</p>
             <v-row v-if="item.fat === '档案新增（接受）'">
-              <v-col cols="4" v-for="(value, index) in item.ext" :key="index">
+              <v-col
+                cols="4"
+                v-for="(value, index) in item.ext"
+                :key="index"
+              >
                 <span>{{quesList[index]}}: </span><span>{{value}}</span>
               </v-col>
             </v-row>
             <v-row v-if="item.fat === '档案系统内调动'">
-              <v-col cols="4" v-for="(value, index) in item.ext" :key="index">
+              <v-col
+                cols="4"
+                v-for="(value, index) in item.ext"
+                :key="index"
+              >
                 <span>{{ndList[index]}}: </span><span>{{value}}</span>
               </v-col>
             </v-row>
             <v-row v-if="item.fat === '档案转递（发）'">
-              <v-col cols="4" v-for="(value, index) in item.ext" :key="index">
+              <v-col
+                cols="4"
+                v-for="(value, index) in item.ext"
+                :key="index"
+              >
                 <span>{{zdfList[index]}}: </span><span>{{value}}</span>
               </v-col>
             </v-row>
             <v-row v-if="item.fat === '档案内调'">
-              <v-col cols="4" v-for="(value, index) in item.ext" :key="index">
+              <v-col
+                cols="4"
+                v-for="(value, index) in item.ext"
+                :key="index"
+              >
                 <span>{{ndList[index]}}: </span><span>{{value}}</span>
               </v-col>
             </v-row>
